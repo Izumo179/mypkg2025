@@ -29,8 +29,8 @@ talker が publish します。
 
 ```text
 cpu=23.5% level=OK
-cpu: 使用率（%）
 ```
+cpu: 使用率（%）
 
 - OK : 使用率が閾値未満
 - WARN : 使用率が閾値以上
