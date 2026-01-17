@@ -18,7 +18,7 @@ CPU 使用率を計算し、`/cpu_usage` に publish します。
 
 ### listener
 
-`/cpu_usage` を購読し、受信した内容を標準出力に表示します。
+`/cpu_usage` を読み、受信した内容を標準出力に表示します。
 
 ## トピック
 ### `/cpu_usage` (`std_msgs/msg/String`)
@@ -32,9 +32,8 @@ cpu=23.5% level=OK
 cpu: 使用率（%）
 ```
 
-- level:
- - OK : 使用率が閾値未満
- - WARN : 使用率が閾値以上
+- OK : 使用率が閾値未満
+- WARN : 使用率が閾値以上
 
 ## パラメータ（talker）
 - rate_hz (float, default: 1.0)
@@ -71,6 +70,9 @@ $ bash test/test.bash
 - ROS 2
 - Linux
 
-## ライセンス
-- BSD-3-Clause
-
+## ライセンス等
+ このプログラムはロボットシステム学課題2のために作成されたものです．
+- このソフトウェアパッケージは，3条項BSDライセンスの下，再頒布および使用が許可されます．
+- このパッケージのコードの一部の書き方や構成は，下記のスライド（CC-BY-SA 4.0 by Ryuichi Ueda）を参考にしたものです．
+    - [ryuichiueda/my_slides robosys_2025](https://github.com/ryuichiueda/slides_marp/tree/master/robosys_2025)
+- © 2025 Soshi Ohseto
