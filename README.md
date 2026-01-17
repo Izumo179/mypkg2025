@@ -1,25 +1,71 @@
 # mypkg2025
+[![test](https://github.com/Izumo179/mypkg2025/actions/workflows/test.yml/badge.svg)](https://github.com/Izumo179/mypkg2025/actions/workflows/test.yml)
 
 ## 概要
-mypkg2025 は、Linux 環境上で CPU の使用状況を取得し、
-ROS 2 のトピックとして定期的に配信するパッケージです。
+mypkg2025 は、Linux 環境における CPU 使用率を取得して、ROS2のトピックとして配信するパッケージです。
 
-talkerノードはCPUの状態を取得し，
-その情報を `/cpu_usage` トピックに文字列としてpublishします。
-
-システムの状態監視やデバッグ用途を想定しています。
+CPU の負荷状況を他ノードから監視したり、ログとして記録したりする用途を想定しています。
 
 ## ノード
-### cpu_publisher（仮）
-CPU 使用率を計算し、一定周期でトピックに publish します。
+
+### talker
+
+CPU 使用率を計算し、`/cpu_usage` に publish します。
+
+- 取得元: Linux の CPU 統計情報（実装では `/proc/stat` を利用）
+- 計算: 2回分の取得値の差分から使用率（%）を算出
+- 出力: 使用率と状態（`OK` / `WARN`）
+
+### listener
+
+`/cpu_usage` を購読し、受信した内容を標準出力に表示します。
 
 ## トピック
-### /cpu_usage
-- 型: std_msgs/msg/String
-- 内容: CPU 使用率を文字列として送信します
+### `/cpu_usage` (`std_msgs/msg/String`)
+
+talker が publish します。
 
 出力例:
-cpu=23.5% level = OK
+
+```text
+cpu=23.5% level=OK
+cpu: 使用率（%）
+```
+
+- level:
+ - OK : 使用率が閾値未満
+ - WARN : 使用率が閾値以上
+
+## パラメータ（talker）
+- rate_hz (float, default: 1.0)
+  publish 周期（Hz）．例: 2.0 なら 0.5 秒周期．
+
+- warn_percent (float, default: 70.0)
+  CPU 使用率がこの値以上のとき level=WARN を出力します．
+
+## 使い方
+### talker の実行
+```console
+$ ros2 run mypkg talker
+```
+
+パラメータを指定する例
+```console
+$ ros2 run mypkg talker --ros-args -p rate_hz:=2.0 -p warn_percent:=50.0
+```
+listener の実行
+```console
+$ ros2 run mypkg listener
+```
+
+別端末で talker を実行した状態で listener を起動すると、受信内容が表示されます。
+
+## テスト
+
+本パッケージは、ノードをブラックボックスとして扱い、ros2 run による起動とトピック通信（入出力）をシェルスクリプトで確認します。
+```console
+$ bash test/test.bash
+```
 
 ## 動作環境
 - ROS 2
