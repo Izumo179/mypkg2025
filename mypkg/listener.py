@@ -18,6 +18,7 @@ class CpuUsageListener(Node):
         )
 
     def listener_callback(self, msg: String):
+        print(f"CPU情報を受信しました: {msg.data}")
         self.get_logger().info(msg.data)
 
 
