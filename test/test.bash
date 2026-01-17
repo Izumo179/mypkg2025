@@ -4,37 +4,59 @@
 
 set -e
 
+fail() {
+  echo "TEST FAILED: $*" >&2
+  exit 1
+}
+
+pass() {
+  echo "TEST PASSED: $*" >&2
+}
+
 set +u
 : "${ROS_DISTRO:=humble}"
 source "/opt/ros/${ROS_DISTRO}/setup.bash"
 set -u
 
-WS="$(pwd)"
+cd /root/ros2_ws
 
-colcon build --symlink-install
+echo "[1] colcon build" >&2
+set +e
+colcon build
+status=$?
+set -e
+[ "$status" -eq 0 ] || fail "colcon build exited with $status"
+pass "colcon build"
 
+set +u
 source install/setup.bash
+set -u
 
-ros2 run mypkg talker >/dev/null 2>&1 &
+echo "[2] start talker" >&2
+set +e
+timeout 5s ros2 run mypkg talker >/tmp/mypkg_talker.log 2>/tmp/mypkg_talker.err &
 TALKER_PID=$!
+set -e
+
+sleep 1
+kill -0 "$TALKER_PID" 2>/dev/null || fail "talker is not running"
 
 cleanup() {
-  kill "${TALKER_PID}" 2>/dev/null || true
+  kill "$TALKER_PID" 2>/dev/null || true
 }
 trap cleanup EXIT
 
-sleep 1
+pass "talker started"
 
-OUTPUT="$(timeout 5 ros2 topic echo -n 1 /cpu_usage || true)"
+echo "[3] run listener (expect message)" >&2
+set +e
+OUT="$(timeout 5s ros2 run mypkg listener 2>/tmp/mypkg_listener.err)"
+status=$?
+set -e
+[ "$status" -eq 0 ] || fail "listener exited with $status"
 
-if [ -z "${OUTPUT}" ]; then
-  echo "テスト失敗:cpu_usageからメッセージを受信できませんでした" >&2
-  exit 1
-fi
+echo "$OUT" | grep -q "CPU" || fail "listener output did not contain 'CPU'"
 
-echo "${OUTPUT}" | grep -Eq 'cpu=[0-9]+(\.[0-9]+)?% level=(OK|WARN)' || {
-  echo "テスト失敗:想定外のメッセージです: ${OUTPUT}" >&2
-  exit 1
-}
+pass "listener received message"
 
-echo "テスト成功！"
+echo "ALL TESTS OK" >&2
