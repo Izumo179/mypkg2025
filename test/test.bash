@@ -2,10 +2,12 @@
 # SPDX-FileCopyrightText: 2025 Soshi Ohseto
 # SPDX-License-Identifier: BSD-3-Clause
 
-set -eu
+set -e
 
+set +u
 : "${ROS_DISTRO:=humble}"
 source "/opt/ros/${ROS_DISTRO}/setup.bash"
+set -u
 
 WS="$(pwd)"
 
