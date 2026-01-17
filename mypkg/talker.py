@@ -15,7 +15,7 @@ class CpuPublisher(Node):
 
     def timer_callback(self):
         msg = String()
-        msg.data = 'cpu=unknown'
+        msg.data = 'cpu check start'
         self.publisher_.publish(msg)
         self.get_logger().info(msg.data)
 
