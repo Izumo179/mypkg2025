@@ -1,17 +1,35 @@
+#!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2025 Soshi Ohseto
+# SPDX-License-Identifier: BSD-3-Clause
+
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Int16
+from std_msgs.msg import String
 
 
-rclpy.init()
-node = Node("listener")
+class CpuUsageListener(Node):
+    def __init__(self):
+        super().__init__("cpu_usage_listener")
+        self.subscription = self.create_subscription(
+            String,
+            "/cpu_usage",
+            self.listener_callback,
+            10,
+        )
 
-
-def cb(msg):
-    global node
-    node.get_logger().info("Listen: %d" % msg.data)
+    def listener_callback(self, msg: String):
+        self.get_logger().info(msg.data)
 
 
 def main():
-    pub = node.create_subscription(Int16, "countup", cb, 10)
-    rclpy.spin(node)
+    rclpy.init()
+    node = CpuUsageListener()
+    try:
+        rclpy.spin(node)
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
+
+
+if __name__ == "__main__":
+    main()
