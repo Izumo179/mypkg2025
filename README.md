@@ -33,12 +33,12 @@ CPU使用率を計算し，`/cpu_usage` にpublishします．
 $ ros2 run mypkg2025 talker
 ```
 
-#パラメータを指定する例
+パラメータを指定する例
 ```console
 $ ros2 run mypkg2025 talker --ros-args -p rate_hz:=2.0 -p warn_percent:=50.0
 ```
 
-###listener の実行
+### listener の実行
 ```console
 $ ros2 run mypkg2025 listener
 
