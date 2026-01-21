@@ -55,8 +55,8 @@ $ bash test/test.bash
 ```
 
 ## 動作環境
-- ROS 2
-- Linux
+- Ubuntu 22.04
+- ROS 2 Humble
 
 ## ライセンス等
  このプログラムはロボットシステム学課題2のために作成されたものです．
