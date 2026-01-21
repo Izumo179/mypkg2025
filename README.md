@@ -61,6 +61,6 @@ $ bash test/test.bash
 ## ライセンス等
  このプログラムはロボットシステム学課題2のために作成されたものです．
 - このソフトウェアパッケージは，3条項BSDライセンスの下，再頒布および使用が許可されます．
-- このパッケージのコードの一部の書き方や構成は，下記のスライド（CC-BY-SA 4.0 by Ryuichi Ueda）を参考にしたものです．
+- このパッケージのコードの一部の書き方や構成は，下記の講義資料（CC-BY-SA 4.0 by Ryuichi Ueda）を参考にしたものです．
     - https://github.com/ryuichiueda/slides_marp/tree/master/robosys2024
 - © 2025 Soshi Ohseto
