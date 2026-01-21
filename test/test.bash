@@ -34,7 +34,7 @@ set -u
 
 echo "[2] start talker" >&2
 set +e
-timeout 5s ros2 run mypkg talker >/tmp/mypkg_talker.log 2>/tmp/mypkg_talker.err &
+timeout 5s ros2 run mypkg2025 talker >/tmp/mypkg_talker.log 2>/tmp/mypkg_talker.err &
 TALKER_PID=$!
 set -e
 
@@ -50,7 +50,7 @@ pass "talker が起動しました"
 
 echo "[3] listener を実行して受信を確認" >&2
 set +e
-OUT="$(timeout 5s ros2 run mypkg listener 2>/tmp/mypkg_listener.err)"
+OUT="$(timeout 5s ros2 run mypkg2025 listener 2>/tmp/mypkg_listener.err)"
 status=$?
 set -e
 

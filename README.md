@@ -45,16 +45,16 @@ cpu: 使用率（%）
 ## 使い方
 ### talker の実行
 ```console
-$ ros2 run mypkg talker
+$ ros2 run mypkg2025 talker
 ```
 
 パラメータを指定する例
 ```console
-$ ros2 run mypkg talker --ros-args -p rate_hz:=2.0 -p warn_percent:=50.0
+$ ros2 run mypkg2025 talker --ros-args -p rate_hz:=2.0 -p warn_percent:=50.0
 ```
 listener の実行
 ```console
-$ ros2 run mypkg listener
+$ ros2 run mypkg2025 listener
 ```
 
 別端末で talker を実行した状態で listener を起動すると、受信内容が表示されます。
